@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# env files — this backend holds Paystack, Neon, JWT and Cloudinary secrets.
+# Nothing but the template is ever committed.
+.env
+.env.*
+!.env.example
+
+# build output (if TypeScript/bundling is added later)
+/dist
+/build
+*.tsbuildinfo
+
+# logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# testing
+/coverage
+.nyc_output/
+
+# local uploads / temp files before they reach Cloudinary
+/uploads
+/tmp
+*.tmp
+
+# caches
+.eslintcache
+.cache/
+
+# os / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+*.swp
+*.pem

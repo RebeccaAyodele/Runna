@@ -1,0 +1,32 @@
+# Repo-wide safety net. Each app also has its own .gitignore
+# (frontend/.gitignore, backend/.gitignore) for stack-specific artifacts.
+
+# dependencies — matches at any depth
+node_modules/
+
+# secrets — belt-and-braces: never commit a real env file from any folder.
+# Only the checked-in templates are allowed through.
+.env
+.env.*
+*.env
+!.env.example
+!**/.env.example
+
+# credentials / keys
+*.pem
+*.key
+*.p12
+*.pfx
+
+# logs
+*.log
+logs/
+
+# os
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# editor
+.idea/
+*.swp
