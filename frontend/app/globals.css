@@ -1,26 +1,62 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --runna-paper: #f7f8fb;
+  --runna-blue: #1550ff;
+  --runna-blue-soft: #e7edff;
+  --runna-blue-mist: #f2f3ff;
+  --runna-coral: #ff6b4a;
+  --runna-ink: #191d2b;
+  --runna-slate: #434656;
+  --runna-muted: #6b7280;
+  --runna-outline: #e2e8f0;
+  --runna-success: #12b76a;
+  --runna-danger: #ba1a1a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-runna-paper: var(--runna-paper);
+  --color-runna-blue: var(--runna-blue);
+  --color-runna-blue-soft: var(--runna-blue-soft);
+  --color-runna-blue-mist: var(--runna-blue-mist);
+  --color-runna-coral: var(--runna-coral);
+  --color-runna-ink: var(--runna-ink);
+  --color-runna-slate: var(--runna-slate);
+  --color-runna-muted: var(--runna-muted);
+  --color-runna-outline: var(--runna-outline);
+  --color-runna-success: var(--runna-success);
+  --color-runna-danger: var(--runna-danger);
+  --font-sans: var(--font-instrument-sans);
+  --font-heading: var(--font-bricolage-grotesque);
+  --shadow-runna-card: 0 14px 36px rgba(21, 80, 255, 0.08);
+  --shadow-runna-card-soft: 0 4px 20px rgba(21, 80, 255, 0.06);
+  --shadow-runna-card-hover: 0 8px 30px rgba(21, 80, 255, 0.15);
+  --shadow-runna-button: 0 12px 24px rgba(255, 107, 74, 0.28);
+  --shadow-runna-focus: 0 0 15px rgba(21, 80, 255, 0.2);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--runna-paper);
+  color: var(--runna-ink);
+  font-family: var(--font-instrument-sans), sans-serif;
+}
+
+.route-path {
+  stroke: var(--runna-blue);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 1 16;
+  animation: route-move 5s linear infinite;
+}
+
+.route-path-light {
+  stroke: white;
+}
+
+@keyframes route-move {
+  to { stroke-dashoffset: -170; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-path { animation: none; }
 }

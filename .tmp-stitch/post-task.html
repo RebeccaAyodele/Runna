@@ -1,0 +1,234 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Post a Task</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&amp;family=Instrument+Sans:ital,wght@0,400..700;1,400..700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#dfe1f5",
+                        "inverse-primary": "#b8c3ff",
+                        "primary-container": "#1550ff",
+                        "on-primary-fixed": "#001355",
+                        "on-secondary-fixed-variant": "#8c1900",
+                        "inverse-surface": "#2c303f",
+                        "primary-fixed-dim": "#b8c3ff",
+                        "secondary": "#ae3115",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#70fda7",
+                        "on-secondary-fixed": "#3d0600",
+                        "surface-white": "#FFFFFF",
+                        "background": "#faf8ff",
+                        "tertiary-fixed-dim": "#51df8e",
+                        "surface-container-highest": "#dfe1f5",
+                        "surface-bright": "#faf8ff",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#72fea9",
+                        "outline-variant": "#c4c5d9",
+                        "on-primary": "#ffffff",
+                        "ink-muted": "#6B7280",
+                        "outline": "#747688",
+                        "on-primary-fixed-variant": "#0035bd",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#eff0ff",
+                        "on-tertiary-fixed-variant": "#00522c",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#0048f6",
+                        "secondary-fixed": "#ffdad2",
+                        "surface-container": "#ebedff",
+                        "surface-dim": "#d6d9ed",
+                        "on-primary-container": "#dfe2ff",
+                        "surface-container-low": "#f2f3ff",
+                        "on-surface": "#171b29",
+                        "on-tertiary-fixed": "#00210e",
+                        "primary": "#003bcd",
+                        "background-cool": "#F7F8FB",
+                        "tertiary-container": "#007541",
+                        "secondary-fixed-dim": "#ffb4a3",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#dde1ff",
+                        "surface-container-high": "#e4e7fb",
+                        "surface": "#faf8ff",
+                        "on-background": "#171b29",
+                        "on-surface-variant": "#434656",
+                        "on-secondary-container": "#640f00",
+                        "tertiary": "#005a31",
+                        "secondary-container": "#fd6a49"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "container-margin": "20px",
+                        "sm": "12px",
+                        "base": "8px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Bricolage Grotesque"],
+                        "body-lg": ["Instrument Sans"],
+                        "price-display": ["Bricolage Grotesque"],
+                        "body-md": ["Instrument Sans"],
+                        "headline-sm": ["Bricolage Grotesque"],
+                        "headline-xl": ["Bricolage Grotesque"],
+                        "body-sm": ["Instrument Sans"],
+                        "headline-lg": ["Bricolage Grotesque"],
+                        "label-bold": ["Instrument Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "30px", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "price-display": ["18px", { "lineHeight": "18px", "fontWeight": "800" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "26px", "fontWeight": "600" }],
+                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-bold": ["14px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background-cool');
+            color: theme('colors.on-surface');
+        }
+        
+        .custom-input {
+            border: 1px solid theme('colors.outline-variant');
+            background-color: theme('colors.surface-white');
+            transition: all 0.2s ease;
+        }
+        .custom-input:focus {
+            outline: none;
+            border-color: theme('colors.primary-container');
+            box-shadow: 0 0 0 4px rgba(21, 80, 255, 0.1);
+        }
+
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: theme('colors.primary-container');
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: theme('colors.primary-container');
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-24 md:pb-0 flex flex-col font-body-md relative">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim shadow-[0_4px_20px_rgba(21,80,255,0.08)] w-full sticky top-0 z-50">
+<div class="flex items-center px-container-margin py-md w-full max-w-2xl mx-auto">
+<button class="text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform duration-200 rounded-full p-2 mr-2 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm text-primary dark:text-inverse-primary">Post a Task</h1>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-2xl mx-auto px-container-margin py-lg space-y-lg">
+<form class="space-y-lg">
+<!-- Task Title -->
+<div class="space-y-xs">
+<label class="font-label-bold text-label-bold text-on-surface block" for="taskTitle">Task Title</label>
+<input class="custom-input w-full rounded-lg px-md py-sm font-body-md text-on-surface placeholder-ink-muted focus:ring-0" id="taskTitle" placeholder="What do you need help with?" type="text">
+</div>
+<!-- Description -->
+<div class="space-y-xs">
+<label class="font-label-bold text-label-bold text-on-surface block" for="taskDescription">Description</label>
+<textarea class="custom-input w-full rounded-lg px-md py-sm font-body-md text-on-surface placeholder-ink-muted focus:ring-0 resize-none" id="taskDescription" placeholder="Add more details..." rows="4"></textarea>
+</div>
+<!-- Proof Requirement -->
+<div class="space-y-xs">
+<label class="font-label-bold text-label-bold text-on-surface block" for="proofReq">Proof Requirement</label>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-2">What should the person show you when it's done?</p>
+<input class="custom-input w-full rounded-lg px-md py-sm font-body-md text-on-surface placeholder-ink-muted focus:ring-0" id="proofReq" placeholder="e.g., A photo of the receipt" type="text">
+</div>
+<!-- Price -->
+<div class="space-y-xs">
+<label class="font-label-bold text-label-bold text-on-surface block" for="taskPrice">Price</label>
+<div class="relative flex items-center">
+<span class="absolute left-md font-price-display text-price-display text-secondary-container">₦</span>
+<input class="custom-input w-full rounded-lg pl-10 pr-md py-sm font-body-md text-on-surface placeholder-ink-muted focus:ring-0" id="taskPrice" placeholder="0.00" type="number">
+</div>
+</div>
+<!-- Estimated Transport Highlight Box -->
+<div class="bg-surface-white border border-secondary-container/20 rounded-xl p-md shadow-sm flex items-start space-x-sm">
+<div class="bg-secondary-container/10 p-2 rounded-lg text-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">directions_bike</span>
+</div>
+<div>
+<h3 class="font-label-bold text-label-bold text-secondary-container">Estimated transport: ₦200</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Based on typical distances for this type of task.</p>
+</div>
+</div>
+<!-- Deadline Toggle -->
+<div class="flex items-center justify-between p-md bg-surface-white rounded-xl border border-outline-variant">
+<div>
+<label class="font-label-bold text-label-bold text-on-surface block">Set a deadline</label>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Does this need to be done by a specific time?</p>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-200 ease-in-out border-outline-variant" id="toggle" name="toggle" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-colors duration-200 ease-in-out" for="toggle"></label>
+</div>
+</div>
+<!-- Primary Action -->
+<div class="pt-sm">
+<button class="w-full bg-secondary-container text-surface-white font-headline-sm text-headline-sm rounded-[16px] py-md shadow-[0_4px_20px_rgba(21,80,255,0.08)] active:scale-95 transition-transform duration-200 flex items-center justify-center space-x-2" type="button">
+<span>Post task</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+</button>
+</div>
+</form>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden bg-surface dark:bg-surface-container-lowest shadow-[0_-4px_20px_rgba(21,80,255,0.08)] fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 rounded-t-xl"><!-- Explore -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:scale-90 transition-all duration-150 rounded-xl px-4 py-1" href="#">
+  <span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">explore</span>
+  <span class="font-label-bold text-label-bold">Explore</span>
+</a>
+<!-- Hustle (Active) -->
+<a class="flex flex-col items-center justify-center bg-secondary-container text-surface-white rounded-xl px-4 py-1 shadow-sm active:scale-90 transition-all duration-150" href="#"><span class="material-symbols-outlined mb-1 text-white" style="font-variation-settings: &quot;FILL&quot; 1;">bolt</span><span class="font-label-bold text-label-bold text-white">Hustle</span></a>
+<!-- Messages -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:scale-90 transition-all duration-150 rounded-xl px-4 py-1" href="#">
+  <span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">chat_bubble</span>
+  <span class="font-label-bold text-label-bold">Messages</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:scale-90 transition-all duration-150 rounded-xl px-4 py-1" href="#">
+  <span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">person</span>
+  <span class="font-label-bold text-label-bold">Profile</span>
+</a></nav>
+<script>
+        // Simple toggle visual logic
+        const toggleInput = document.getElementById('toggle');
+        const toggleLabel = document.querySelector('.toggle-label');
+        
+        toggleInput.addEventListener('change', function() {
+            if(this.checked) {
+                this.style.transform = 'translateX(100%)';
+            } else {
+                this.style.transform = 'translateX(0)';
+            }
+        });
+    </script>
+
+
+</body></html>

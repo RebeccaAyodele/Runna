@@ -1,0 +1,331 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Nearby Tasks</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&amp;family=Instrument+Sans:ital,wght@0,400..700;1,400..700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary": "#005a31",
+                      "on-surface-variant": "#434656",
+                      "primary-container": "#1550ff",
+                      "inverse-surface": "#2c303f",
+                      "secondary-fixed-dim": "#ffb4a3",
+                      "surface-tint": "#0048f6",
+                      "on-tertiary-container": "#72fea9",
+                      "surface-bright": "#faf8ff",
+                      "background-cool": "#F7F8FB",
+                      "on-secondary-container": "#640f00",
+                      "primary-fixed-dim": "#b8c3ff",
+                      "error-container": "#ffdad6",
+                      "on-primary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#00522c",
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed": "#001355",
+                      "surface-dim": "#d6d9ed",
+                      "on-primary-fixed-variant": "#0035bd",
+                      "on-surface": "#171b29",
+                      "secondary-container": "#fd6a49",
+                      "surface-variant": "#dfe1f5",
+                      "background": "#faf8ff",
+                      "secondary": "#ae3115",
+                      "on-secondary-fixed-variant": "#8c1900",
+                      "ink-muted": "#6B7280",
+                      "on-error-container": "#93000a",
+                      "surface-container-low": "#f2f3ff",
+                      "outline": "#747688",
+                      "primary": "#003bcd",
+                      "on-tertiary-fixed": "#00210e",
+                      "surface-container-high": "#e4e7fb",
+                      "on-primary-container": "#dfe2ff",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#3d0600",
+                      "secondary-fixed": "#ffdad2",
+                      "inverse-primary": "#b8c3ff",
+                      "surface-container": "#ebedff",
+                      "tertiary-container": "#007541",
+                      "tertiary-fixed": "#70fda7",
+                      "inverse-on-surface": "#eff0ff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface": "#faf8ff",
+                      "outline-variant": "#c4c5d9",
+                      "tertiary-fixed-dim": "#51df8e",
+                      "on-background": "#171b29",
+                      "on-error": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed": "#dde1ff",
+                      "surface-container-highest": "#dfe1f5",
+                      "surface-white": "#FFFFFF"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "32px",
+                      "base": "8px",
+                      "lg": "24px",
+                      "sm": "12px",
+                      "md": "16px",
+                      "container-margin": "20px",
+                      "gutter": "16px",
+                      "xs": "4px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Instrument Sans"
+                      ],
+                      "headline-lg": [
+                              "Bricolage Grotesque"
+                      ],
+                      "body-sm": [
+                              "Instrument Sans"
+                      ],
+                      "label-bold": [
+                              "Instrument Sans"
+                      ],
+                      "body-md": [
+                              "Instrument Sans"
+                      ],
+                      "headline-md": [
+                              "Bricolage Grotesque"
+                      ],
+                      "headline-sm": [
+                              "Bricolage Grotesque"
+                      ],
+                      "headline-xl": [
+                              "Bricolage Grotesque"
+                      ],
+                      "price-display": [
+                              "Bricolage Grotesque"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-bold": [
+                              "14px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "30px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "26px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-xl": [
+                              "40px",
+                              {
+                                      "lineHeight": "48px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "price-display": [
+                              "18px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "800"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+        .dashed-route {
+            background-image: linear-gradient(to bottom, #1550ff 50%, transparent 50%);
+            background-size: 2px 8px;
+            background-repeat: repeat-y;
+            width: 2px;
+        }
+        /* Mobile layout containment */
+        body {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="bg-background-cool font-body-md text-on-surface pb-24">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-background-cool dark:bg-on-surface shadow-sm shadow-primary/5 flex items-center justify-between px-container-margin py-base z-40 h-16">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface cursor-pointer" data-icon="menu">menu</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary font-extrabold flex-1 text-center">Nearby tasks</h1>
+<div aria-label="User profile" class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden cursor-pointer">
+<img alt="" class="object-cover w-full h-full" data-alt="A vibrant, modern avatar illustration of a college student wearing headphones, bathed in bright studio lighting with energetic pops of coral and signal blue. The style is crisp, flat vector art typical of modern tech interfaces." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXClN9ho36SUM1uOSTLw9rBYGJhk6E1yAEmuKw69mKdF5mmpt0xOKPKr4nLJ1IPi7xMVR74u3s9DykHMnQCVfit-bLLWPoEfP9X2D9lYtYEOK3igaFXCiRuA29bF4TRIyhOzgUsuPibyOsIo6Xd3gExnjRo3a_9BLNmtD288I8O8ib4OcvEcFHACP6trygJHQhgBc2-UrH1rSn8UCiuniKdfDpqNllYLgQVgQmSgO50FYPB_MDbkA">
+</div>
+</header>
+<!-- Content Canvas -->
+<main class="px-container-margin pt-sm pb-lg space-y-lg flex flex-col items-center">
+<!-- Task Card 1 -->
+<article class="bg-surface-white rounded-xl p-md shadow-[0_4px_20px_rgba(21,80,255,0.05)] w-full max-w-sm relative hover:-translate-y-1 transition-transform duration-200 border border-transparent hover:border-primary-container/20 group cursor-pointer flex flex-col gap-sm">
+<div class="flex justify-between items-start gap-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface flex-1 pr-12 line-clamp-2">Pick up library books from main campus</h2>
+<div class="bg-[#FF6B4A] text-on-primary font-price-display text-price-display px-sm py-xs rounded-lg absolute top-md right-md shadow-sm">
+                    $15
+                </div>
+</div>
+<div class="flex items-center gap-xs mt-xs">
+<span class="bg-primary-container/10 text-primary-container font-label-bold text-label-bold px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span> 250m
+                 </span>
+<span class="text-ink-muted font-body-sm text-body-sm flex items-center gap-1 truncate max-w-[150px]">
+<span class="material-symbols-outlined text-[16px]">business</span> University Library
+                 </span>
+</div>
+<div class="h-[1px] w-full bg-outline-variant/30 my-xs"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-primary-container relative">
+<div class="absolute inset-0 rounded-full bg-primary-container animate-ping opacity-75"></div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Open • Needed by 4pm</span>
+</div>
+<button class="bg-primary-container/10 hover:bg-primary-container/20 text-primary-container rounded-full p-2 transition-colors">
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Task Card 2 -->
+<article class="bg-surface-white rounded-xl p-md shadow-[0_4px_20px_rgba(21,80,255,0.05)] w-full max-w-sm relative hover:-translate-y-1 transition-transform duration-200 border border-transparent hover:border-primary-container/20 group cursor-pointer flex flex-col gap-sm">
+<div class="flex justify-between items-start gap-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface flex-1 pr-12 line-clamp-2">Deliver coffee to Study Hall 4B</h2>
+<div class="bg-[#FF6B4A] text-on-primary font-price-display text-price-display px-sm py-xs rounded-lg absolute top-md right-md shadow-sm">
+                    $8
+                </div>
+</div>
+<div class="flex items-center gap-xs mt-xs">
+<span class="bg-primary-container/10 text-primary-container font-label-bold text-label-bold px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span> 1.2km
+                 </span>
+<span class="text-ink-muted font-body-sm text-body-sm flex items-center gap-1 truncate max-w-[150px]">
+<span class="material-symbols-outlined text-[16px]">local_cafe</span> Starbucks (North)
+                 </span>
+</div>
+<div class="h-[1px] w-full bg-outline-variant/30 my-xs"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-[#FF6B4A]"></div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Claimed • In progress</span>
+</div>
+</div>
+</article>
+<!-- Task Card 3 -->
+<article class="bg-surface-white rounded-xl p-md shadow-[0_4px_20px_rgba(21,80,255,0.05)] w-full max-w-sm relative hover:-translate-y-1 transition-transform duration-200 border border-transparent hover:border-primary-container/20 group cursor-pointer flex flex-col gap-sm">
+<div class="flex justify-between items-start gap-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface flex-1 pr-12 line-clamp-2">Drop off lab equipment at Science Bldg</h2>
+<div class="bg-[#FF6B4A] text-on-primary font-price-display text-price-display px-sm py-xs rounded-lg absolute top-md right-md shadow-sm">
+                    $25
+                </div>
+</div>
+<div class="flex items-center gap-xs mt-xs flex-wrap">
+<span class="bg-primary-container/10 text-primary-container font-label-bold text-label-bold px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span> 450m
+                 </span>
+<span class="bg-tertiary/10 text-tertiary font-label-bold text-label-bold px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> Trusted Plus
+                 </span>
+<span class="text-ink-muted font-body-sm text-body-sm flex items-center gap-1 w-full mt-1">
+<span class="material-symbols-outlined text-[16px]">business</span> Dorm C
+                 </span>
+</div>
+<div class="h-[1px] w-full bg-outline-variant/30 my-xs"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-primary-container relative">
+<div class="absolute inset-0 rounded-full bg-primary-container animate-ping opacity-75"></div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Open • Heavy item</span>
+</div>
+</div>
+</article>
+</main>
+<!-- FAB -->
+<button class="fixed bottom-28 right-container-margin w-14 h-14 bg-[#FF6B4A] rounded-full shadow-lg shadow-[#FF6B4A]/30 flex items-center justify-center text-on-primary hover:scale-105 active:scale-95 transition-transform z-40">
+<span class="material-symbols-outlined" style="font-size: 28px;">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-container-lowest border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(21,80,255,0.08)] flex justify-around items-center h-20 px-4 pb-safe max-w-[480px] mx-auto left-0 right-0">
+<!-- Explore (Active) -->
+<a class="flex flex-col items-center justify-center bg-secondary-container rounded-xl px-4 py-1.5 active:scale-90 transition-transform duration-200 text-white" href="#">
+<span class="material-symbols-outlined" data-icon="explore" data-weight="fill">explore</span>
+<span class="font-label-bold text-label-bold mt-1">Explore</span>
+</a>
+<!-- Activity -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 duration-200 px-4 py-1.5" href="#">
+<span class="material-symbols-outlined" data-icon="Assignment">quick_reference</span>
+<span class="font-label-bold text-label-bold mt-1">Activity</span>
+</a>
+<!-- Messages -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 duration-200 px-4 py-1.5 relative" href="#">
+<div class="absolute top-1 right-3 w-2 h-2 bg-secondary rounded-full"></div>
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-label-bold text-label-bold mt-1">Messages</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 duration-200 px-4 py-1.5" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-bold text-label-bold mt-1">Profile</span>
+</a>
+</nav>
+
+
+</body></html>

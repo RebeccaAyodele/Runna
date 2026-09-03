@@ -1,0 +1,306 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Runna - Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&amp;family=Instrument+Sans:ital,wght@0,400..700;1,400..700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error": "#ffffff",
+                      "surface": "#faf8ff",
+                      "surface-container-high": "#e4e7fb",
+                      "secondary-container": "#fd6a49",
+                      "on-secondary-container": "#640f00",
+                      "on-primary-container": "#dfe2ff",
+                      "on-tertiary-container": "#72fea9",
+                      "surface-tint": "#0048f6",
+                      "surface-bright": "#faf8ff",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed-variant": "#00522c",
+                      "tertiary-fixed-dim": "#51df8e",
+                      "on-primary-fixed": "#001355",
+                      "primary": "#003bcd",
+                      "background-cool": "#F7F8FB",
+                      "inverse-primary": "#b8c3ff",
+                      "secondary-fixed-dim": "#ffb4a3",
+                      "error": "#ba1a1a",
+                      "on-background": "#171b29",
+                      "inverse-surface": "#2c303f",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed": "#ffdad2",
+                      "inverse-on-surface": "#eff0ff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-white": "#FFFFFF",
+                      "tertiary-fixed": "#70fda7",
+                      "tertiary-container": "#007541",
+                      "background": "#faf8ff",
+                      "on-primary": "#ffffff",
+                      "primary-fixed-dim": "#b8c3ff",
+                      "surface-container-highest": "#dfe1f5",
+                      "surface-container-low": "#f2f3ff",
+                      "primary-fixed": "#dde1ff",
+                      "outline-variant": "#c4c5d9",
+                      "outline": "#747688",
+                      "ink-muted": "#6B7280",
+                      "surface-variant": "#dfe1f5",
+                      "surface-container": "#ebedff",
+                      "on-secondary-fixed": "#3d0600",
+                      "on-secondary-fixed-variant": "#8c1900",
+                      "tertiary": "#005a31",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed": "#00210e",
+                      "secondary": "#ae3115",
+                      "on-surface-variant": "#434656",
+                      "on-surface": "#171b29",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#d6d9ed",
+                      "primary-container": "#1550ff",
+                      "on-primary-fixed-variant": "#0035bd"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "container-margin": "20px",
+                      "lg": "24px",
+                      "xl": "32px",
+                      "md": "16px",
+                      "base": "8px",
+                      "sm": "12px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "headline-xl": [
+                              "Bricolage Grotesque"
+                      ],
+                      "body-md": [
+                              "Instrument Sans"
+                      ],
+                      "body-sm": [
+                              "Instrument Sans"
+                      ],
+                      "headline-md": [
+                              "Bricolage Grotesque"
+                      ],
+                      "headline-sm": [
+                              "Bricolage Grotesque"
+                      ],
+                      "body-lg": [
+                              "Instrument Sans"
+                      ],
+                      "headline-lg": [
+                              "Bricolage Grotesque"
+                      ],
+                      "price-display": [
+                              "Bricolage Grotesque"
+                      ],
+                      "label-bold": [
+                              "Instrument Sans"
+                      ]
+              },
+              "fontSize": {
+                      "headline-xl": [
+                              "40px",
+                              {
+                                      "lineHeight": "48px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "30px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "26px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "price-display": [
+                              "18px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "label-bold": [
+                              "14px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background-cool min-h-screen text-on-background pb-32">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-container-margin py-sm h-16 bg-background dark:bg-on-background font-headline-sm text-headline-sm-mobile md:text-headline-sm docked full-width top-0 shadow-[0_4px_20px_rgba(21,80,255,0.08)] bg-background-cool dark:bg-on-background fixed top-0 z-40">
+<button class="text-primary dark:text-inverse-primary hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-150 p-2 -ml-2 rounded-full hover:bg-surface-container-low" data-icon="arrow_back">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="font-headline-md text-headline-md text-primary dark:text-primary-fixed font-extrabold tracking-tight">Runna</div>
+<button class="w-8 h-8 rounded-full overflow-hidden hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-150">
+<img class="w-full h-full object-cover" data-alt="A small, circular avatar portrait of a young female university student looking friendly and energetic. The image is bright, high-contrast, and sits against a clean white background. This is a profile picture for a modern student app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWzxtgnvkpFudi4oOVbW5Iwv9UdjCm_RuCi2-vEWZZIIuqjNOy4wQfu_Aw7c_ACXyXtTzKW6Fvnh2wzMui01uO4_AF86v54DXRW3JyIZ8bO3IXkZ7p5WqwfZ2NL4OC4kbn7a1LoDI4y2jhT7D6QnvTAdiS9GgonoFBdrbvYHWNFX5cqZgKkVrEQPCBWFpejYTHzmV43qbI22B4-_bL088xHfABPYk-hwTknMfy6dY-ElAllMB6ELM">
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 px-container-margin md:max-w-2xl mx-auto">
+<!-- Profile Header -->
+<section class="flex flex-col items-center mb-lg">
+<div class="relative w-24 h-24 mb-sm">
+<img class="w-full h-full rounded-full object-cover shadow-sm border-2 border-surface-white" data-alt="A close-up, circular portrait of a young female student named Sarah M., displaying a warm, reliable expression. The lighting is soft and bright, emphasizing a modern, clean aesthetic typical of a high-quality peer-to-peer app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtuDzbf5y46ZTO0uNcfZQ4wTdbsiNZLrbEuxMkgQ54drd141DDFcZ9zEK15QdtVRE1UiaX6K5MrXRQJLlDd0ijwkCxBb4Y7Or2bl271YdjXIS0gdU8JlBQRNLAavBZb9vLt7UCoSjwWZIRLpFQc7ZmFZ6iIP18t5WuXbX4VAVfTlt1fUkYX7wZqR_asbkEfmwAnl2HzLj9A_fM_3mUARB3yp28cuLCr2MoslPj0qLie5ArXtD-nlU">
+<div class="absolute bottom-0 right-0 bg-primary text-surface-white font-label-bold text-[10px] px-2 py-0.5 rounded-full border-2 border-surface-white shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                    Trusted
+                </div>
+</div>
+<h1 class="font-headline-lg text-headline-lg mb-xs">Sarah M.</h1>
+<div class="flex items-center gap-2 mb-md bg-surface-white px-3 py-1.5 rounded-full shadow-sm">
+<span class="font-headline-md text-headline-md text-primary">4.9</span>
+<div class="flex text-[#FFC107]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline">(124)</span>
+</div>
+</section>
+<!-- Tabs -->
+<div class="flex border-b border-outline-variant mb-md">
+<button class="flex-1 pb-2 text-center font-label-bold text-label-bold text-outline hover:text-primary transition-colors">
+                Posted
+            </button>
+<button class="flex-1 pb-2 text-center font-label-bold text-label-bold text-on-background border-b-2 border-secondary-container">
+                Completed
+            </button>
+</div>
+<!-- Task List -->
+<div class="space-y-4">
+<!-- Task Card 1 -->
+<div class="bg-surface-white rounded-xl p-md shadow-[0_4px_20px_rgba(21,80,255,0.08)] relative overflow-hidden group hover:shadow-lg transition-shadow">
+<!-- Decorative Route Path -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-[repeating-linear-gradient(to_bottom,transparent,transparent_4px,#1550ff_4px,#1550ff_8px)] opacity-20"></div>
+<div class="pl-3">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-background">Pick up package</h3>
+<div class="bg-tertiary-container text-on-tertiary px-2 py-1 rounded-md font-label-bold text-[12px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                            Completed
+                        </div>
+</div>
+<div class="flex items-center gap-sm text-outline font-body-sm text-body-sm mb-3">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> 2 days ago</span>
+<span class="">•</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">payments</span> $15</span>
+</div>
+<div class="flex justify-between items-center mt-3 pt-3 border-t border-surface-container">
+<div class="flex items-center gap-2">
+<img class="w-6 h-6 rounded-full object-cover" data-alt="A small circular avatar of the user who requested the package pickup. A bright, friendly face in a well-lit setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG1ETXWD_qkYSvAPV4HoAdBPT7W0xU5DLOukHNVmzKv7RHH5-4-btYPPqkJaVYPaUuX3S3Q78LnduZ4tqC9eiqZ7qHX2RMtRIdtozn8sAJ8g91Ch4QFFVHWqHtWYFnC2iCZU18QIztIe9w7sVi9SHhob70Rl3jQDtwC5Vay46TkVy6219edXqo4ypltEeO1rjWZ6byrhifdbbTHljCKPtlLWw2OLdcKobtTDPmApahABUM-n0BoZE">
+<span class="font-body-sm text-body-sm text-on-surface-variant">For Alex T.</span>
+</div>
+<button class="text-primary font-label-bold text-label-bold hover:underline">View Details</button>
+</div>
+</div>
+</div>
+<!-- Task Card 2 -->
+<div class="bg-surface-white rounded-xl p-md shadow-[0_4px_20px_rgba(21,80,255,0.08)] relative overflow-hidden group hover:shadow-lg transition-shadow">
+<!-- Decorative Route Path -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-[repeating-linear-gradient(to_bottom,transparent,transparent_4px,#1550ff_4px,#1550ff_8px)] opacity-20"></div>
+<div class="pl-3">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-background">Print lab report</h3>
+<div class="bg-tertiary-container text-on-tertiary px-2 py-1 rounded-md font-label-bold text-[12px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                            Completed
+                        </div>
+</div>
+<div class="flex items-center gap-sm text-outline font-body-sm text-body-sm mb-3">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> 5 days ago</span>
+<span class="">•</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">payments</span> $8</span>
+</div>
+<div class="flex justify-between items-center mt-3 pt-3 border-t border-surface-container">
+<div class="flex items-center gap-2">
+<img class="w-6 h-6 rounded-full object-cover" data-alt="A small circular avatar of the user who requested the printing. A student studying in a library setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRuldgDDSFOBfA97T8ARXh6tWt66WRJ4arYTRzxxFMmuYTWyRNzIVHjNhN3ahvndRe6fpvkS2Btmkb9ZnbbIaeZM2_wJOaVw9aZoB_zWF-k6UYP9q7lZQlOHwSBNpS9bVpvvp4a2pEZjl2bohy6kxnTxp_3MyKzg6Qkn9WrsPkA2DRloGzIPK7Ot_0lZHHHveMLeCL2CN2QP6Z1mNPCbAstL_2ekXM8Qm0noxZWNoFFGI7WQGci_4">
+<span class="font-body-sm text-body-sm text-on-surface-variant">For Jamie L.</span>
+</div>
+<button class="text-primary font-label-bold text-label-bold hover:underline">View Details</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-white dark:bg-inverse-surface shadow-lg rounded-t-xl md:hidden">
+<button class="flex flex-col items-center justify-center text-outline dark:text-outline-variant px-4 py-1 hover:bg-surface-container-low dark:hover:bg-surface-variant active:scale-90 transition-all duration-200 group">
+<span class="material-symbols-outlined mb-1 group-hover:text-primary transition-colors">bolt</span>
+<span class="font-label-bold text-[12px] group-hover:text-primary transition-colors">Hustle</span>
+</button>
+<button class="flex flex-col items-center justify-center text-outline dark:text-outline-variant px-4 py-1 hover:bg-surface-container-low dark:hover:bg-surface-variant active:scale-90 transition-all duration-200 group">
+<span class="material-symbols-outlined mb-1 group-hover:text-primary transition-colors">assignment</span>
+<span class="font-label-bold text-[12px] group-hover:text-primary transition-colors">Tasks</span>
+</button>
+<button class="flex flex-col items-center justify-center text-outline dark:text-outline-variant px-4 py-1 hover:bg-surface-container-low dark:hover:bg-surface-variant active:scale-90 transition-all duration-200 group">
+<span class="material-symbols-outlined mb-1 group-hover:text-primary transition-colors">chat_bubble</span>
+<span class="font-label-bold text-[12px] group-hover:text-primary transition-colors">Messages</span>
+</button>
+<!-- Modified to Profile as requested, overriding JSON logic for semantic correctness based on prompt -->
+<button class="flex flex-col items-center justify-center bg-[#FF6B4A] text-surface-white rounded-2xl px-4 py-1 active:scale-90 transition-all duration-200 shadow-sm">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-bold text-[12px]">Profile</span>
+</button>
+</nav>
+
+
+</body></html>
