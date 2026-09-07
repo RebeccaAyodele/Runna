@@ -10,8 +10,10 @@
   --runna-slate: #434656;
   --runna-muted: #6b7280;
   --runna-outline: #e2e8f0;
+  --runna-outline-strong: #c4c5d9;
   --runna-success: #12b76a;
   --runna-danger: #ba1a1a;
+  --runna-star: #ffc107;
 }
 
 @theme inline {
@@ -24,8 +26,10 @@
   --color-runna-slate: var(--runna-slate);
   --color-runna-muted: var(--runna-muted);
   --color-runna-outline: var(--runna-outline);
+  --color-runna-outline-strong: var(--runna-outline-strong);
   --color-runna-success: var(--runna-success);
   --color-runna-danger: var(--runna-danger);
+  --color-runna-star: var(--runna-star);
   --font-sans: var(--font-instrument-sans);
   --font-heading: var(--font-bricolage-grotesque);
   --shadow-runna-card: 0 14px 36px rgba(21, 80, 255, 0.08);
@@ -33,6 +37,7 @@
   --shadow-runna-card-hover: 0 8px 30px rgba(21, 80, 255, 0.15);
   --shadow-runna-button: 0 12px 24px rgba(255, 107, 74, 0.28);
   --shadow-runna-focus: 0 0 15px rgba(21, 80, 255, 0.2);
+  --shadow-runna-nav: 0 -4px 20px rgba(21, 80, 255, 0.08);
 }
 
 body {
