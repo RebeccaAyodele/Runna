@@ -41,8 +41,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# pwa / service worker (generated at build, not source)
-public/sw.js
+# pwa / service worker
+# `public/sw.js` is hand-written source and IS committed — only generated
+# workbox output is ignored here.
 public/sw.js.map
 public/workbox-*.js
 public/workbox-*.js.map

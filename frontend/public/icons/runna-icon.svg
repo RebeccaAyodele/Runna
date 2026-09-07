@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Runna">
+  <rect width="512" height="512" rx="112" fill="#1550ff"/>
+  <path d="M96 352C160 352 176 176 272 176s112 96 144 40"
+        fill="none" stroke="#ffffff" stroke-width="26" stroke-linecap="round"
+        stroke-dasharray="6 44"/>
+  <circle cx="392" cy="196" r="34" fill="#ff6b4a"/>
+</svg>

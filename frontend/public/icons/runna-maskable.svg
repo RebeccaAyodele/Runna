@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Runna">
+  <!-- Maskable: artwork stays inside the 80% safe zone so a circular or
+       squircle mask on Android can't clip the route motif or the marker. -->
+  <rect width="512" height="512" fill="#1550ff"/>
+  <path d="M144 316C192 316 204 196 272 196s84 72 108 32"
+        fill="none" stroke="#ffffff" stroke-width="24" stroke-linecap="round"
+        stroke-dasharray="6 40"/>
+  <circle cx="372" cy="216" r="28" fill="#ff6b4a"/>
+</svg>
