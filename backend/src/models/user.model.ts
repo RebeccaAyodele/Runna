@@ -48,3 +48,14 @@ export const createUser = async (data: CreateUserInput): Promise<Omit<User, 'pas
     const result = await pool.query(query, values);
     return result.rows[0];
 }
+
+// Login
+export const findUserByEmail = async (email: string): Promise<User | null> => {
+    const query = `
+        SELECT * FROM users
+        WHERE email = $1
+        LIMIT 1;
+    `;
+    const result = await pool.query(query, [email.toLowerCase().trim()]);
+    return result.rows[0] || null;
+}

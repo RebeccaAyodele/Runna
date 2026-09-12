@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import argon2 from 'argon2';
-import { findUserByEmailOrMatric, createUser } from '../models/user.model.js';
+import { findUserByEmailOrMatric, createUser, findUserByEmail } from '../models/user.model.js';
 
 
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -52,5 +53,50 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     } catch (error) {
         console.error('Registration error:', error);
         res.status(500).json({ error: 'Internal server error during registration.' });
+    }
+}
+
+export const login = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            res.status(400).json({ error: 'Please provide both email and password.' });
+            return;
+        }
+
+        const user = await findUserByEmail(email);
+        if (!user) {
+            res.status(401).json({ error: 'Invalid email or password' });
+            return;
+        }
+
+        const isPasswordValid = await argon2.verify(user.password_hash, password);
+        if (!isPasswordValid) {
+            res.status(401).json({ error: 'Invalid credentials.' });
+            return;
+        }
+
+        const jwtSecret = process.env.JWT_SECRET || 'fallback_secret_key_change_in_production';
+        const token = jwt.sign(
+            {
+                userId: user.id,
+                email: user.email,
+                matricNumber: user.matric_number
+            },
+            jwtSecret,
+            { expiresIn: '7d' }
+        );
+
+        const { password_hash, ...safeUser } = user;
+
+        res.status(200).json({
+            message: 'Login successful',
+            token,
+            user: safeUser
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ error: 'Internal server error during login.' });
     }
 }
