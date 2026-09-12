@@ -59,3 +59,15 @@ export const findUserByEmail = async (email: string): Promise<User | null> => {
     const result = await pool.query(query, [email.toLowerCase().trim()]);
     return result.rows[0] || null;
 }
+
+// Verify user before posting a task
+export const findUserById = async (id: string): Promise<Omit<User, 'password_hash'> | null> => {
+    const query = `
+        SELECT id, full_name, email, matric_number, phone, is_verified, created_at, updated_at
+        FROM users
+        WHERE id = $1
+        LIMIT 1;
+    `;
+    const result = await pool.query(query, [id]);
+    return result.rows[0] || null;
+}

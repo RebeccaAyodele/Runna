@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import argon2 from 'argon2';
-import { findUserByEmailOrMatric, createUser, findUserByEmail } from '../models/user.model.js';
+import { findUserByEmailOrMatric, createUser, findUserByEmail, findUserById } from '../models/user.model.js';
+import { AuthRequest } from '../middleware/auth.middleware.js';
 
 
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -98,5 +99,26 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ error: 'Internal server error during login.' });
+    }
+}
+
+export const getMe = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        if (!req.user) {
+            res.status(401).json({ error: 'Unathorized.' });
+            return;
+        }
+
+        const user = await findUserById(req.user.userId);
+        if (!user) {
+            res.status(400).json({ error: 'User not found.' });
+
+            return
+        }
+
+        res.status(200).json({ user });
+    } catch (error) {
+        console.error('getMe error:', error);
+        res.status(500).json({ error: 'Internal server error fetching profile.' });
     }
 }
