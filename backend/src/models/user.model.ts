@@ -23,7 +23,7 @@ export interface CreateUserInput {
 export const findUserByEmailOrMatric = async (email: string, matric_number: string): Promise<User | null> => {
     const query = `
         SELECT * FROM users
-        WHERE email = $1 OR matric_number = $2
+        WHERE LOWER(email) = LOWER($1) OR LOWER(matric_number) = LOWER($2)
         LIMIT 1
     `;
     const result = await pool.query(query, [email.toLowerCase().trim(), matric_number.trim()]);
@@ -53,7 +53,7 @@ export const createUser = async (data: CreateUserInput): Promise<Omit<User, 'pas
 export const findUserByEmail = async (email: string): Promise<User | null> => {
     const query = `
         SELECT * FROM users
-        WHERE email = $1
+        WHERE LOWER(email) = LOWER($1)
         LIMIT 1;
     `;
     const result = await pool.query(query, [email.toLowerCase().trim()]);
