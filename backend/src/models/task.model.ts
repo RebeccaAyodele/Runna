@@ -81,9 +81,12 @@ export const getOpenTasks = async (limit: number = 20): Promise<TaskDto[]> => {
 
 export const findTaskById = async (id: string): Promise<TaskDto | null> => {
     const query = `
-        SELECT t.*, u.full_name as poster_name, u.avatar_url as poster_avatar
+        SELECT t.*, 
+               u.full_name as poster_name, u.avatar_url as poster_avatar,
+               r.full_name as runner_name, r.avatar_url as runner_avatar
         FROM tasks t
         JOIN users u ON t.poster_id = u.id
+        LEFT JOIN users r ON t.runner_id = r.id
         WHERE t.id = $1
         LIMIT 1;
     `;
@@ -94,10 +97,35 @@ export const findTaskById = async (id: string): Promise<TaskDto | null> => {
 export const claimTask = async (taskId: string, runnerId: string): Promise<TaskDto | null> => {
     const query = `
         UPDATE tasks
-        SET status = 'claimed', runner_id = $2, updated_at = NOW()
+        SET status = 'claimed', runner_id = $2, claimed_at = NOW(), updated_at = NOW()
         WHERE id = $1 AND LOWER(status) = 'open'
-        RETURNING *;
+        RETURNING id;
     `;
     const result = await pool.query(query, [taskId, runnerId]);
-    return result.rows[0] ? formatTask(result.rows[0]) : null;
+    if (!result.rows[0]) return null;
+    return await findTaskById(taskId);
+};
+
+export const getTasksByPoster = async (posterId: string): Promise<TaskDto[]> => {
+    const query = `
+        SELECT t.*, u.full_name as poster_name, u.avatar_url as poster_avatar
+        FROM tasks t
+        JOIN users u ON t.poster_id = u.id
+        WHERE t.poster_id = $1
+        ORDER BY t.created_at DESC;
+    `;
+    const result = await pool.query(query, [posterId]);
+    return result.rows.map(formatTask);
+};
+
+export const getCompletedTasksByRunner = async (runnerId: string): Promise<TaskDto[]> => {
+    const query = `
+        SELECT t.*, u.full_name as poster_name, u.avatar_url as poster_avatar
+        FROM tasks t
+        JOIN users u ON t.poster_id = u.id
+        WHERE t.runner_id = $1 AND LOWER(t.status) IN ('completed', 'confirmed')
+        ORDER BY t.updated_at DESC;
+    `;
+    const result = await pool.query(query, [runnerId]);
+    return result.rows.map(formatTask);
 };

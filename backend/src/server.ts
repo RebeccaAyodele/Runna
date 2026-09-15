@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes.js';
 import taskRoutes from './routes/task.routes.js';
+import userRoutes from './routes/user.routes.js';
 import './config/db.js';
 
 dotenv.config()
@@ -27,7 +28,9 @@ app.use('/auth', authRoutes);
 
 app.use('/tasks', taskRoutes);
 
+app.use('/users', userRoutes);
+
 
 app.listen(PORT, () => {
-    console.log(`Server is runnin on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });

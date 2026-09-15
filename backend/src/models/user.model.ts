@@ -5,9 +5,12 @@ export interface User {
     full_name: string;
     email: string;
     matric_number: string;
-    phone: string;
+    phone: string | null;
     password_hash: string;
     is_verified: boolean;
+    verification_code: string | null;
+    verification_code_expires_at: Date | null;
+    avatar_url: string | null;
     created_at: Date;
     updated_at: Date;
 }
@@ -16,8 +19,10 @@ export interface CreateUserInput {
     fullName: string;
     email: string;
     matricNumber: string;
-    phone: string;
+    phone: string | null;
     passwordHash: string;
+    verificationCode?: string | null;
+    verificationCodeExpiresAt?: Date | null;
 }
 
 export const findUserByEmailOrMatric = async (email: string, matric_number: string): Promise<User | null> => {
@@ -32,17 +37,27 @@ export const findUserByEmailOrMatric = async (email: string, matric_number: stri
 
 export const createUser = async (data: CreateUserInput): Promise<Omit<User, 'password_hash'>> => {
     const query = `
-        INSERT INTO users (full_name, email, matric_number, phone, password_hash)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING id, full_name, email, matric_number, phone, is_verified, created_at, updated_at;
+        INSERT INTO users (
+            full_name, 
+            email, 
+            matric_number, 
+            phone, 
+            password_hash, 
+            verification_code, 
+            verification_code_expires_at
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING *;
     `;
 
     const values = [
         data.fullName.trim(),
         data.email.toLowerCase().trim(),
         data.matricNumber.trim(),
-        data.phone.trim(),
-        data.passwordHash
+        data.phone ? data.phone.trim() : null,
+        data.passwordHash,
+        data.verificationCode || null,
+        data.verificationCodeExpiresAt || null
     ];
 
     const result = await pool.query(query, values);

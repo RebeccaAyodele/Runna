@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { AuthRequest } from '../middleware/auth.middleware.js';
 import { createTask, getOpenTasks, findTaskById, claimTask, formatTask } from '../models/task.model.js';
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export const postTask = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
         if (!req.user) {
@@ -18,7 +20,7 @@ export const postTask = async (req: AuthRequest, res: Response): Promise<void> =
         const description = req.body.description;
         const location = req.body.locationName || req.body.location;
         const fee = req.body.taskPrice !== undefined ? req.body.taskPrice : req.body.fee;
-        const proofRequirement = req.body.proofRequirement || '';
+        const proofRequirement = req.body.proofRequirement;
         const deadlineAt = req.body.deadlineAt || null;
 
         if (typeof title !== 'string' || !title.trim()) {
@@ -51,6 +53,16 @@ export const postTask = async (req: AuthRequest, res: Response): Promise<void> =
             return;
         }
 
+        if (typeof proofRequirement !== 'string' || !proofRequirement.trim()) {
+            res.status(400).json({
+                error: {
+                    message: 'Please provide what proof is required for completion (e.g. photo of receipt).',
+                    code: 'MISSING_PROOF_REQUIREMENT'
+                }
+            });
+            return;
+        }
+
         const numericFee = Number(fee);
         if (!Number.isFinite(numericFee) || numericFee <= 0) {
             res.status(400).json({
@@ -62,20 +74,30 @@ export const postTask = async (req: AuthRequest, res: Response): Promise<void> =
             return;
         }
 
+        if (deadlineAt && (typeof deadlineAt !== 'string' || isNaN(Date.parse(deadlineAt)))) {
+            res.status(400).json({
+                error: {
+                    message: 'Invalid deadline date format. Please provide a valid ISO date string.',
+                    code: 'INVALID_DEADLINE'
+                }
+            });
+            return;
+        }
+
         const rawTask = await createTask({
-            title,
-            description,
-            proofRequirement,
-            location,
+            title: title.trim(),
+            description: description.trim(),
+            proofRequirement: proofRequirement.trim(),
+            location: location.trim(),
             fee: numericFee,
             posterId: req.user.userId,
             deadlineAt
         });
 
-        // Add user details to format formatted response
+        // Format formatted response using user's real name from JWT
         const formatted = formatTask({
             ...rawTask,
-            poster_name: req.user.matricNumber || 'Poster'
+            poster_name: req.user.fullName || 'Campus Student'
         });
 
         res.status(201).json({
@@ -95,7 +117,9 @@ export const postTask = async (req: AuthRequest, res: Response): Promise<void> =
 
 export const listTasks = async (req: Request, res: Response): Promise<void> => {
     try {
-        const limit = Number(req.query.limit) || 20;
+        const rawLimit = Number(req.query.limit);
+        const limit = Number.isFinite(rawLimit) ? Math.min(Math.max(1, rawLimit), 50) : 20;
+
         const tasks = await getOpenTasks(limit);
         res.status(200).json({ tasks, nextCursor: null });
     } catch (error) {
@@ -112,6 +136,17 @@ export const listTasks = async (req: Request, res: Response): Promise<void> => {
 export const getTask = async (req: Request, res: Response): Promise<void> => {
     try {
         const id = req.params.id as string;
+
+        if (!UUID_REGEX.test(id)) {
+            res.status(400).json({
+                error: {
+                    message: 'Invalid task ID format.',
+                    code: 'INVALID_ID'
+                }
+            });
+            return;
+        }
+
         const task = await findTaskById(id);
         if (!task) {
             res.status(404).json({
@@ -147,6 +182,17 @@ export const claimTaskHandler = async (req: AuthRequest, res: Response): Promise
         }
 
         const id = req.params.id as string;
+
+        if (!UUID_REGEX.test(id)) {
+            res.status(400).json({
+                error: {
+                    message: 'Invalid task ID format.',
+                    code: 'INVALID_ID'
+                }
+            });
+            return;
+        }
+
         const task = await findTaskById(id);
         if (!task) {
             res.status(404).json({

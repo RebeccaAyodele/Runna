@@ -16,7 +16,7 @@ export interface UserDto {
     email: string;
     schoolEmail: string;
     matricNumber: string;
-    phone: string;
+    phone: string | null;
     isVerified: boolean;
     trustTier: TrustTier;
     avgRating: number | null;
@@ -29,9 +29,11 @@ export interface DbUserRow {
     full_name: string;
     email: string;
     matric_number: string;
-    phone: string;
+    phone: string | null;
     password_hash: string;
     is_verified: boolean;
+    verification_code?: string | null;
+    verification_code_expires_at?: Date | null;
     avatar_url: string | null;
     created_at: Date;
     updated_at: Date;
@@ -41,8 +43,10 @@ export interface CreateUserInput {
     fullName: string;
     email: string;
     matricNumber: string;
-    phone: string;
+    phone?: string | null;
     passwordHash: string;
+    verificationCode?: string | null;
+    verificationCodeExpiresAt?: Date | null;
 }
 
 

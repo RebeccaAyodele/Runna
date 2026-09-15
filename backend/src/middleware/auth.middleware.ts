@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken'
 export interface AuthRequest extends Request {
     user?: {
         userId: string;
+        fullName: string;
         email: string;
         matricNumber: string;
     };
@@ -33,6 +34,7 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
 
         const decoded = jwt.verify(token, jwtSecret) as {
             userId: string;
+            fullName: string;
             email: string;
             matricNumber: string;
         };
