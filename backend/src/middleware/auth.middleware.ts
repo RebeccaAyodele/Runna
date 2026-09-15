@@ -46,7 +46,7 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
             error:
             {
                 message: 'Invalid or expired token.',
-                code: 'INVALID TOKEN'
+                code: 'INVALID_TOKEN'
             }
         });
     }

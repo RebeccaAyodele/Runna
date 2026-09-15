@@ -3,6 +3,8 @@ import { findUserById } from '../models/user.model.js';
 import { getTasksByPoster, getCompletedTasksByRunner } from '../models/task.model.js';
 import { PublicUserDto } from '../types/index.js';
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export const formatPublicUser = (user: any): PublicUserDto => ({
     id: user.id,
     fullName: user.full_name,
@@ -16,6 +18,17 @@ export const formatPublicUser = (user: any): PublicUserDto => ({
 export const getUserProfile = async (req: Request, res: Response): Promise<void> => {
     try {
         const id = req.params.id as string;
+
+        if (!UUID_REGEX.test(id)) {
+            res.status(400).json({
+                error: {
+                    message: 'Invalid user ID format.',
+                    code: 'INVALID_ID'
+                }
+            });
+            return;
+        }
+
         const user = await findUserById(id);
 
         if (!user) {

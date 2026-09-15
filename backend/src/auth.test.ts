@@ -77,3 +77,34 @@ test('formatTask formats numbers and handles null runners safely', () => {
     assert.equal(taskDto.poster.fullName, 'Poster Name');
     assert.equal(taskDto.doer, null);
 });
+
+test('formatTask populates doer summary when runner is assigned', () => {
+    const rawTask = {
+        id: '987e6543-e21b-12d3-a456-426614174000',
+        title: 'Pick up textbook',
+        description: 'From Hezekiah Library',
+        proof_requirement: 'Photo of book cover',
+        location: 'Hezekiah Library',
+        fee: 2000,
+        status: 'completed',
+        poster_id: '11111111-1111-1111-1111-111111111111',
+        runner_id: '22222222-2222-2222-2222-222222222222',
+        proof_image_url: 'https://example.com/proof.jpg',
+        deadline_at: new Date('2026-12-31T00:00:00Z'),
+        created_at: new Date('2026-01-01T00:00:00Z'),
+        updated_at: new Date('2026-01-01T01:00:00Z'),
+        poster_name: 'Poster Name',
+        poster_avatar: null,
+        runner_name: 'Runner Name',
+        runner_avatar: 'https://example.com/runner.png'
+    };
+
+    const taskDto = formatTask(rawTask);
+
+    assert.equal(taskDto.status, 'completed');
+    assert.notEqual(taskDto.doer, null);
+    assert.equal(taskDto.doer?.id, '22222222-2222-2222-2222-222222222222');
+    assert.equal(taskDto.doer?.fullName, 'Runner Name');
+    assert.equal(taskDto.doer?.avatarUrl, 'https://example.com/runner.png');
+    assert.equal(taskDto.proofPhotoUrl, 'https://example.com/proof.jpg');
+});

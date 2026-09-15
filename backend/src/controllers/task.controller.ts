@@ -1,6 +1,16 @@
 import { Request, Response } from 'express';
 import { AuthRequest } from '../middleware/auth.middleware.js';
-import { createTask, getOpenTasks, findTaskById, claimTask, formatTask } from '../models/task.model.js';
+import {
+    createTask,
+    getOpenTasks,
+    findTaskById,
+    claimTask,
+    completeTask,
+    confirmTask,
+    disputeTask,
+    cancelTask,
+    formatTask
+} from '../models/task.model.js';
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -249,6 +259,292 @@ export const claimTaskHandler = async (req: AuthRequest, res: Response): Promise
         res.status(500).json({
             error: {
                 message: 'Internal server error claiming task.',
+                code: 'INTERNAL_SERVER_ERROR'
+            }
+        });
+    }
+};
+
+export const completeTaskHandler = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        if (!req.user) {
+            res.status(401).json({
+                error: {
+                    message: 'Unauthorized.',
+                    code: 'UNAUTHORIZED'
+                }
+            });
+            return;
+        }
+
+        const id = req.params.id as string;
+
+        if (!UUID_REGEX.test(id)) {
+            res.status(400).json({
+                error: {
+                    message: 'Invalid task ID format.',
+                    code: 'INVALID_ID'
+                }
+            });
+            return;
+        }
+
+        const proofImageUrl = typeof req.body.proofImageUrl === 'string'
+            ? req.body.proofImageUrl.trim()
+            : typeof req.body.proofPhotoUrl === 'string'
+                ? req.body.proofPhotoUrl.trim()
+                : null;
+
+        const updatedTask = await completeTask(id, req.user.userId, proofImageUrl);
+
+        if (!updatedTask) {
+            const task = await findTaskById(id);
+            if (!task) {
+                res.status(404).json({
+                    error: {
+                        message: 'Task not found.',
+                        code: 'TASK_NOT_FOUND'
+                    }
+                });
+                return;
+            }
+            if (task.doer?.id !== req.user.userId) {
+                res.status(403).json({
+                    error: {
+                        message: 'Only the assigned runner can complete this task.',
+                        code: 'FORBIDDEN'
+                    }
+                });
+                return;
+            }
+            res.status(400).json({
+                error: {
+                    message: `Task cannot be marked completed from '${task.status}' status.`,
+                    code: 'INVALID_STATUS_TRANSITION'
+                }
+            });
+            return;
+        }
+
+        res.status(200).json({
+            message: 'Task marked as completed! Waiting for poster confirmation.',
+            task: updatedTask
+        });
+    } catch (error) {
+        console.error('Error completing task:', error);
+        res.status(500).json({
+            error: {
+                message: 'Internal server error completing task.',
+                code: 'INTERNAL_SERVER_ERROR'
+            }
+        });
+    }
+};
+
+export const confirmTaskHandler = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        if (!req.user) {
+            res.status(401).json({
+                error: {
+                    message: 'Unauthorized.',
+                    code: 'UNAUTHORIZED'
+                }
+            });
+            return;
+        }
+
+        const id = req.params.id as string;
+
+        if (!UUID_REGEX.test(id)) {
+            res.status(400).json({
+                error: {
+                    message: 'Invalid task ID format.',
+                    code: 'INVALID_ID'
+                }
+            });
+            return;
+        }
+
+        const updatedTask = await confirmTask(id, req.user.userId);
+
+        if (!updatedTask) {
+            const task = await findTaskById(id);
+            if (!task) {
+                res.status(404).json({
+                    error: {
+                        message: 'Task not found.',
+                        code: 'TASK_NOT_FOUND'
+                    }
+                });
+                return;
+            }
+            if (task.poster.id !== req.user.userId) {
+                res.status(403).json({
+                    error: {
+                        message: 'Only the task poster can confirm completion and release payment.',
+                        code: 'FORBIDDEN'
+                    }
+                });
+                return;
+            }
+            res.status(400).json({
+                error: {
+                    message: `Task cannot be confirmed from '${task.status}' status. It must be completed first.`,
+                    code: 'INVALID_STATUS_TRANSITION'
+                }
+            });
+            return;
+        }
+
+        res.status(200).json({
+            message: 'Task confirmed and payment released!',
+            task: updatedTask
+        });
+    } catch (error) {
+        console.error('Error confirming task:', error);
+        res.status(500).json({
+            error: {
+                message: 'Internal server error confirming task.',
+                code: 'INTERNAL_SERVER_ERROR'
+            }
+        });
+    }
+};
+
+export const disputeTaskHandler = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        if (!req.user) {
+            res.status(401).json({
+                error: {
+                    message: 'Unauthorized.',
+                    code: 'UNAUTHORIZED'
+                }
+            });
+            return;
+        }
+
+        const id = req.params.id as string;
+
+        if (!UUID_REGEX.test(id)) {
+            res.status(400).json({
+                error: {
+                    message: 'Invalid task ID format.',
+                    code: 'INVALID_ID'
+                }
+            });
+            return;
+        }
+
+        const updatedTask = await disputeTask(id, req.user.userId);
+
+        if (!updatedTask) {
+            const task = await findTaskById(id);
+            if (!task) {
+                res.status(404).json({
+                    error: {
+                        message: 'Task not found.',
+                        code: 'TASK_NOT_FOUND'
+                    }
+                });
+                return;
+            }
+            if (task.poster.id !== req.user.userId && task.doer?.id !== req.user.userId) {
+                res.status(403).json({
+                    error: {
+                        message: 'Only the poster or runner associated with this task can open a dispute.',
+                        code: 'FORBIDDEN'
+                    }
+                });
+                return;
+            }
+            res.status(400).json({
+                error: {
+                    message: `Task cannot be disputed from '${task.status}' status.`,
+                    code: 'INVALID_STATUS_TRANSITION'
+                }
+            });
+            return;
+        }
+
+        res.status(200).json({
+            message: 'Task dispute opened. Support will review the task history.',
+            task: updatedTask
+        });
+    } catch (error) {
+        console.error('Error disputing task:', error);
+        res.status(500).json({
+            error: {
+                message: 'Internal server error disputing task.',
+                code: 'INTERNAL_SERVER_ERROR'
+            }
+        });
+    }
+};
+
+export const cancelTaskHandler = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        if (!req.user) {
+            res.status(401).json({
+                error: {
+                    message: 'Unauthorized.',
+                    code: 'UNAUTHORIZED'
+                }
+            });
+            return;
+        }
+
+        const id = req.params.id as string;
+
+        if (!UUID_REGEX.test(id)) {
+            res.status(400).json({
+                error: {
+                    message: 'Invalid task ID format.',
+                    code: 'INVALID_ID'
+                }
+            });
+            return;
+        }
+
+        const updatedTask = await cancelTask(id, req.user.userId);
+
+        if (!updatedTask) {
+            const task = await findTaskById(id);
+            if (!task) {
+                res.status(404).json({
+                    error: {
+                        message: 'Task not found.',
+                        code: 'TASK_NOT_FOUND'
+                    }
+                });
+                return;
+            }
+            if (task.poster.id !== req.user.userId) {
+                res.status(403).json({
+                    error: {
+                        message: 'Only the task poster can cancel this task.',
+                        code: 'FORBIDDEN'
+                    }
+                });
+                return;
+            }
+            res.status(400).json({
+                error: {
+                    message: `Only open tasks can be cancelled (current status: '${task.status}').`,
+                    code: 'CANNOT_CANCEL_TASK'
+                }
+            });
+            return;
+        }
+
+        res.status(200).json({
+            message: 'Task cancelled successfully.',
+            task: updatedTask
+        });
+    } catch (error) {
+        console.error('Error cancelling task:', error);
+        res.status(500).json({
+            error: {
+                message: 'Internal server error cancelling task.',
                 code: 'INTERNAL_SERVER_ERROR'
             }
         });

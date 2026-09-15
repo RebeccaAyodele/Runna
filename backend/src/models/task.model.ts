@@ -143,6 +143,65 @@ export const claimTask = async (taskId: string, runnerId: string): Promise<TaskD
     return await findTaskById(taskId);
 };
 
+export const completeTask = async (taskId: string, runnerId: string, proofImageUrl?: string | null): Promise<TaskDto | null> => {
+    const query = `
+        UPDATE tasks
+        SET status = 'completed', 
+            proof_image_url = COALESCE($3, proof_image_url), 
+            completed_at = NOW(), 
+            updated_at = NOW()
+        WHERE id = $1 
+          AND runner_id = $2 
+          AND LOWER(status) IN ('claimed', 'in_progress')
+        RETURNING id;
+    `;
+    const result = await pool.query(query, [taskId, runnerId, proofImageUrl || null]);
+    if (!result.rows[0]) return null;
+    return await findTaskById(taskId);
+};
+
+export const confirmTask = async (taskId: string, posterId: string): Promise<TaskDto | null> => {
+    const query = `
+        UPDATE tasks
+        SET status = 'confirmed', confirmed_at = NOW(), updated_at = NOW()
+        WHERE id = $1 
+          AND poster_id = $2 
+          AND LOWER(status) = 'completed'
+        RETURNING id;
+    `;
+    const result = await pool.query(query, [taskId, posterId]);
+    if (!result.rows[0]) return null;
+    return await findTaskById(taskId);
+};
+
+export const disputeTask = async (taskId: string, userId: string): Promise<TaskDto | null> => {
+    const query = `
+        UPDATE tasks
+        SET status = 'disputed', updated_at = NOW()
+        WHERE id = $1 
+          AND (poster_id = $2 OR runner_id = $2) 
+          AND LOWER(status) IN ('claimed', 'in_progress', 'completed')
+        RETURNING id;
+    `;
+    const result = await pool.query(query, [taskId, userId]);
+    if (!result.rows[0]) return null;
+    return await findTaskById(taskId);
+};
+
+export const cancelTask = async (taskId: string, posterId: string): Promise<TaskDto | null> => {
+    const query = `
+        UPDATE tasks
+        SET status = 'cancelled', updated_at = NOW()
+        WHERE id = $1 
+          AND poster_id = $2 
+          AND LOWER(status) = 'open'
+        RETURNING id;
+    `;
+    const result = await pool.query(query, [taskId, posterId]);
+    if (!result.rows[0]) return null;
+    return await findTaskById(taskId);
+};
+
 export const getTasksByPoster = async (posterId: string, limit: number = 20): Promise<TaskDto[]> => {
     const query = `
         SELECT t.*, 

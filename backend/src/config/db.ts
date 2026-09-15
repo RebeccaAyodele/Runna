@@ -13,10 +13,13 @@ const isLocal = process.env.DATABASE_URL.includes('localhost') || process.env.DA
 
 export const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
     ssl: isLocal
         ? false
         : {
-            rejectUnauthorized: true,
+            rejectUnauthorized: false,
         }
 });
 
