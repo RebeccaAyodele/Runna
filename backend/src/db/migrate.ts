@@ -11,7 +11,6 @@ async function runMigrations() {
     const client = await pool.connect();
 
     try {
-        // Ensure migration tracking table exists
         await client.query(`
             CREATE TABLE IF NOT EXISTS _migrations (
                 id SERIAL PRIMARY KEY,
@@ -20,7 +19,6 @@ async function runMigrations() {
             );
         `);
 
-        // Get already executed migrations
         const { rows } = await client.query('SELECT filename FROM _migrations');
         const executedSet = new Set(rows.map((r: { filename: string }) => r.filename));
 
