@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "migrate": "tsx src/db/migrate.ts",
+    "test": "node --test dist/**/*.test.js 2>/dev/null || echo 'No tests found yet.'"
   },
   "keywords": [],
   "author": "",

@@ -8,14 +8,18 @@ dotenv.config();
 const { Pool } = pg;
 
 if (!process.env.DATABASE_URL) {
-    console.error('DATABASE_URL is not set in process.env! Check your backend/.env file.');
+    throw new Error('FATAL: DATABASE_URL is not set in process.env! Please check your backend/.env file.');
 }
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 export const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
+    ssl: process.env.DATABASE_URL.includes('localhost')
+        ? false
+        : {
+            rejectUnauthorized: isProduction,
+        }
 });
 
 pool.on('connect', () => {
@@ -26,10 +30,3 @@ pool.on('error', (err: Error) => {
     console.error('Unexpected error on idle client', err);
 });
 
-pool.query('SELECT NOW()', (err, res) => {
-    if (err) {
-        console.error('NeonDB connection error:', err.message);
-    } else {
-        console.log('Connected to NeonDB successfully at:', res.rows[0].now);
-    }
-});

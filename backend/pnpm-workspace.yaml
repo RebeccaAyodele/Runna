@@ -1,4 +1,4 @@
 allowBuilds:
-  argon2: false
-  bcrypt: false
-  esbuild: false
+  argon2: true
+  bcrypt: true
+  esbuild: true
