@@ -65,18 +65,53 @@ export const createTask = async (data: CreateTaskInput): Promise<DbTaskRow> => {
     return result.rows[0];
 };
 
-export const getOpenTasks = async (limit: number = 20): Promise<TaskDto[]> => {
-    const query = `
-        SELECT t.*, u.full_name as poster_name, u.avatar_url as poster_avatar
+export interface GetTasksOptions {
+    limit?: number;
+    search?: string;
+    cursor?: string;
+}
+
+export const getOpenTasks = async (options: GetTasksOptions = {}): Promise<{ tasks: TaskDto[]; nextCursor: string | null }> => {
+    const limit = options.limit || 20;
+    const values: any[] = [];
+    let paramIndex = 1;
+
+    let query = `
+        SELECT t.*, 
+               u.full_name as poster_name, u.avatar_url as poster_avatar,
+               r.full_name as runner_name, r.avatar_url as runner_avatar
         FROM tasks t
         JOIN users u ON t.poster_id = u.id
+        LEFT JOIN users r ON t.runner_id = r.id
         WHERE LOWER(t.status) = 'open'
-        ORDER BY t.created_at DESC
-        LIMIT $1;
+          AND (t.deadline_at IS NULL OR t.deadline_at > NOW())
     `;
 
-    const result = await pool.query(query, [limit]);
-    return result.rows.map(formatTask);
+    if (options.search && options.search.trim()) {
+        query += ` AND (t.title ILIKE $${paramIndex} OR t.description ILIKE $${paramIndex} OR t.location ILIKE $${paramIndex})`;
+        values.push(`%${options.search.trim()}%`);
+        paramIndex++;
+    }
+
+    if (options.cursor) {
+        query += ` AND t.created_at < $${paramIndex}`;
+        values.push(options.cursor);
+        paramIndex++;
+    }
+
+    query += ` ORDER BY t.created_at DESC LIMIT $${paramIndex}`;
+    values.push(limit + 1); // fetch 1 extra to determine nextCursor
+
+    const result = await pool.query(query, values);
+    const hasMore = result.rows.length > limit;
+    const rows = hasMore ? result.rows.slice(0, limit) : result.rows;
+    const tasks = rows.map(formatTask);
+
+    const nextCursor = hasMore && rows.length > 0
+        ? new Date(rows[rows.length - 1].created_at).toISOString()
+        : null;
+
+    return { tasks, nextCursor };
 };
 
 export const findTaskById = async (id: string): Promise<TaskDto | null> => {
@@ -98,7 +133,9 @@ export const claimTask = async (taskId: string, runnerId: string): Promise<TaskD
     const query = `
         UPDATE tasks
         SET status = 'claimed', runner_id = $2, claimed_at = NOW(), updated_at = NOW()
-        WHERE id = $1 AND LOWER(status) = 'open'
+        WHERE id = $1 
+          AND LOWER(status) = 'open'
+          AND (deadline_at IS NULL OR deadline_at > NOW())
         RETURNING id;
     `;
     const result = await pool.query(query, [taskId, runnerId]);
@@ -106,26 +143,34 @@ export const claimTask = async (taskId: string, runnerId: string): Promise<TaskD
     return await findTaskById(taskId);
 };
 
-export const getTasksByPoster = async (posterId: string): Promise<TaskDto[]> => {
+export const getTasksByPoster = async (posterId: string, limit: number = 20): Promise<TaskDto[]> => {
     const query = `
-        SELECT t.*, u.full_name as poster_name, u.avatar_url as poster_avatar
+        SELECT t.*, 
+               u.full_name as poster_name, u.avatar_url as poster_avatar,
+               r.full_name as runner_name, r.avatar_url as runner_avatar
         FROM tasks t
         JOIN users u ON t.poster_id = u.id
+        LEFT JOIN users r ON t.runner_id = r.id
         WHERE t.poster_id = $1
-        ORDER BY t.created_at DESC;
+        ORDER BY t.created_at DESC
+        LIMIT $2;
     `;
-    const result = await pool.query(query, [posterId]);
+    const result = await pool.query(query, [posterId, limit]);
     return result.rows.map(formatTask);
 };
 
-export const getCompletedTasksByRunner = async (runnerId: string): Promise<TaskDto[]> => {
+export const getCompletedTasksByRunner = async (runnerId: string, limit: number = 20): Promise<TaskDto[]> => {
     const query = `
-        SELECT t.*, u.full_name as poster_name, u.avatar_url as poster_avatar
+        SELECT t.*, 
+               u.full_name as poster_name, u.avatar_url as poster_avatar,
+               r.full_name as runner_name, r.avatar_url as runner_avatar
         FROM tasks t
         JOIN users u ON t.poster_id = u.id
+        LEFT JOIN users r ON t.runner_id = r.id
         WHERE t.runner_id = $1 AND LOWER(t.status) IN ('completed', 'confirmed')
-        ORDER BY t.updated_at DESC;
+        ORDER BY t.updated_at DESC
+        LIMIT $2;
     `;
-    const result = await pool.query(query, [runnerId]);
+    const result = await pool.query(query, [runnerId, limit]);
     return result.rows.map(formatTask);
 };

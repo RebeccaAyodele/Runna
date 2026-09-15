@@ -45,3 +45,27 @@ export async function requireUser(): Promise<{ token: string; user: User }> {
   }
   return { token, user };
 }
+
+/**
+ * Runs one authenticated API call with the session token.
+ *
+ * Screens use this instead of pulling the token out themselves so that a dead
+ * session lands on sign-in from anywhere, not just the screens that happen to
+ * need the user record. Everything other than a 401/403 is rethrown for
+ * `error.tsx` — a task that's genuinely gone should read as "not found", and the
+ * API being down shouldn't sign anyone out.
+ *
+ *   const tasks = await withSession((token) => listTasks(token));
+ */
+export async function withSession<T>(call: (token: string) => Promise<T>): Promise<T> {
+  const token = await requireSession();
+  try {
+    return await call(token);
+  } catch (error) {
+    if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
+      await destroySession();
+      redirect(SIGN_IN_PATH);
+    }
+    throw error;
+  }
+}

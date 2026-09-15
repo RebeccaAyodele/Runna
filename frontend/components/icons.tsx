@@ -159,6 +159,11 @@ export function CheckCircleIcon({ className, filled = false }: IconProps & { fil
   return <Icon className={className}><circle cx="12" cy="12" r="9.2" /><path d="m8 12.3 2.6 2.6L16 9.5" /></Icon>;
 }
 
+/** A check inside a circle with a gap — Material's `task_alt`, used for requirements. */
+export function TaskAltIcon({ className }: IconProps) {
+  return <Icon className={className}><path d="M20.5 11.2v.8a9 9 0 1 1-5.3-8.2" /><path d="m8.5 11.8 3 3 8-8.4" /></Icon>;
+}
+
 export function VerifiedIcon({ className }: IconProps) {
   return <SolidIcon className={className}><path d="m12 1.5 2.4 2.2 3.2-.4.9 3.1 2.9 1.4-1.2 3 1.2 3-2.9 1.4-.9 3.1-3.2-.4L12 22.5l-2.4-2.2-3.2.4-.9-3.1L2.6 16.2l1.2-3-1.2-3 2.9-1.4.9-3.1 3.2.4L12 1.5Zm-1.3 14.2 5.6-5.6-1.5-1.5-4.1 4.1-2-2L7.2 12l3.5 3.7Z" /></SolidIcon>;
 }

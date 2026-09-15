@@ -24,6 +24,16 @@ export interface UserDto {
     createdAt: Date | string;
 }
 
+export interface PublicUserDto {
+    id: string;
+    fullName: string;
+    matricNumber: string;
+    trustTier: TrustTier;
+    avgRating: number | null;
+    avatarUrl: string | null;
+    createdAt: Date | string;
+}
+
 export interface DbUserRow {
     id: string;
     full_name: string;

@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() 
 );
 
-CREATE INDEX IF NOT EXISTS idx_users_email_lower ON users (LOWER(email));
-CREATE INDEX IF NOT EXISTS idx_users_matric_lower ON users (LOWER(matric_number));
+CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email_lower ON users (LOWER(email));
+CREATE UNIQUE INDEX IF NOT EXISTS idx_users_matric_lower ON users (LOWER(matric_number));
 
 CREATE TABLE IF NOT EXISTS tasks (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

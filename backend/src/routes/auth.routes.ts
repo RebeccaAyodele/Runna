@@ -5,17 +5,11 @@ import { authLimiter } from '../middleware/rateLimit.middleware.js';
 
 const router = Router();
 
-router.post('/signup', register);
-
-router.post('/login', login)
-
-router.get('/me', authenticate, getMe)
-
-router.post('/verify-email', verifyEmail);
-
+router.post('/signup', authLimiter, register);
+router.post('/login', authLimiter, login);
+router.get('/me', authenticate, getMe);
+router.post('/verify-email', authLimiter, verifyEmail);
 router.post('/resend-verification', authLimiter, resendVerification);
-
 router.post('/forgot-password', authLimiter, forgotPassword);
-
 
 export default router;

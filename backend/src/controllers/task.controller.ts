@@ -19,7 +19,7 @@ export const postTask = async (req: AuthRequest, res: Response): Promise<void> =
         const title = req.body.title;
         const description = req.body.description;
         const location = req.body.locationName || req.body.location;
-        const fee = req.body.taskPrice !== undefined ? req.body.taskPrice : req.body.fee;
+        const rawFee = req.body.taskPrice !== undefined ? req.body.taskPrice : req.body.fee;
         const proofRequirement = req.body.proofRequirement;
         const deadlineAt = req.body.deadlineAt || null;
 
@@ -63,8 +63,11 @@ export const postTask = async (req: AuthRequest, res: Response): Promise<void> =
             return;
         }
 
-        const numericFee = Number(fee);
-        if (!Number.isFinite(numericFee) || numericFee <= 0) {
+        // Strictly validate numeric fee type (reject booleans, arrays, objects)
+        const isValidFeeType = typeof rawFee === 'number' || (typeof rawFee === 'string' && rawFee.trim() !== '');
+        const numericFee = isValidFeeType ? Number(rawFee) : NaN;
+
+        if (!isValidFeeType || !Number.isFinite(numericFee) || numericFee <= 0) {
             res.status(400).json({
                 error: {
                     message: 'Task price / fee must be a valid number greater than 0.',
@@ -94,7 +97,7 @@ export const postTask = async (req: AuthRequest, res: Response): Promise<void> =
             deadlineAt
         });
 
-        // Format formatted response using user's real name from JWT
+        // Format response using user's real name from JWT
         const formatted = formatTask({
             ...rawTask,
             poster_name: req.user.fullName || 'Campus Student'
@@ -118,10 +121,12 @@ export const postTask = async (req: AuthRequest, res: Response): Promise<void> =
 export const listTasks = async (req: Request, res: Response): Promise<void> => {
     try {
         const rawLimit = Number(req.query.limit);
-        const limit = Number.isFinite(rawLimit) ? Math.min(Math.max(1, rawLimit), 50) : 20;
+        const limit = Number.isInteger(rawLimit) && rawLimit > 0 ? Math.min(rawLimit, 50) : 20;
+        const search = typeof req.query.search === 'string' ? req.query.search : undefined;
+        const cursor = typeof req.query.cursor === 'string' ? req.query.cursor : undefined;
 
-        const tasks = await getOpenTasks(limit);
-        res.status(200).json({ tasks, nextCursor: null });
+        const { tasks, nextCursor } = await getOpenTasks({ limit, search, cursor });
+        res.status(200).json({ tasks, nextCursor });
     } catch (error) {
         console.error('Error fetching tasks:', error);
         res.status(500).json({
@@ -228,7 +233,7 @@ export const claimTaskHandler = async (req: AuthRequest, res: Response): Promise
         if (!updatedTask) {
             res.status(409).json({
                 error: {
-                    message: 'This task has already been claimed by someone else.',
+                    message: 'This task has already been claimed by someone else or has expired.',
                     code: 'TASK_ALREADY_CLAIMED'
                 }
             });

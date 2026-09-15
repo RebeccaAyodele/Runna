@@ -15,20 +15,7 @@ import {
   type FormState,
 } from "@/lib/validation";
 
-/**
- * Server Actions for the onboarding forms.
- *
- * Each one takes `(previousState, formData)` so it can drive `useActionState`,
- * and returns a `FormState` the form re-renders from. Nothing here runs in the
- * browser: the password never reaches client JavaScript as state, and the JWT
- * goes straight from the API response into an httpOnly cookie.
- *
- * `redirect()` works by throwing, so every call sits outside its try/catch —
- * inside one it would be swallowed as a failure.
- */
-
-/** Where a freshly authenticated student lands. Points at the task feed once `(app)` exists. */
-const POST_SIGN_IN_REDIRECT = "/";
+const POST_SIGN_IN_REDIRECT = "/explore";
 
 function readField(formData: FormData, name: string): string {
   const value = formData.get(name);

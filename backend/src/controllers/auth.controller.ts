@@ -1,16 +1,19 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import argon2 from 'argon2';
+import crypto from 'crypto';
 import { findUserByEmailOrMatric, createUser, findUserByEmail, findUserById } from '../models/user.model.js';
 import { AuthRequest } from '../middleware/auth.middleware.js';
 import { pool } from '../config/db.js';
 import { sendVerificationOtpEmail } from '../services/email.service.js';
+import { UserDto } from '../types/index.js';
 
 // Accepts student.oauife.edu.ng or oauife.edu.ng
 const STUDENT_EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@(student\.)?oauife\.edu\.ng$/i;
 const OTP_REGEX = /^\d{6}$/;
+const MATRIC_REGEX = /^[a-zA-Z0-9/_-]{3,30}$/;
 
-export const formatUser = (user: any) => ({
+export const formatUser = (user: any): UserDto => ({
     id: user.id,
     fullName: user.full_name,
     email: user.email,
@@ -24,9 +27,9 @@ export const formatUser = (user: any) => ({
     createdAt: user.created_at
 });
 
-// Helper to generate 6-digit numeric OTP
+// Cryptographically secure 6-digit numeric OTP generator
 const generateOtp = (): string => {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+    return crypto.randomInt(100000, 1000000).toString();
 };
 
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -57,6 +60,16 @@ export const register = async (req: Request, res: Response): Promise<void> => {
                 error: {
                     message: 'Password must be at least 8 characters long.',
                     code: 'WEAK_PASSWORD'
+                }
+            });
+            return;
+        }
+
+        if (!MATRIC_REGEX.test(trimmedMatric)) {
+            res.status(400).json({
+                error: {
+                    message: 'Invalid matriculation number format. Please provide a valid student matric number.',
+                    code: 'INVALID_MATRIC_NUMBER'
                 }
             });
             return;
@@ -251,7 +264,7 @@ export const getMe = async (req: AuthRequest, res: Response): Promise<void> => {
     }
 };
 
-// VERIFY EMAIL WITH REAL OTP CHECK
+// VERIFY EMAIL WITH ATOMIC OTP CONSUMPTION
 export const verifyEmail = async (req: Request, res: Response): Promise<void> => {
     try {
         const email = req.body.email || req.body.schoolEmail;
@@ -279,62 +292,51 @@ export const verifyEmail = async (req: Request, res: Response): Promise<void> =>
         }
 
         const trimmedEmail = email.toLowerCase().trim();
-        const user = await findUserByEmail(trimmedEmail);
 
-        if (!user) {
-            res.status(404).json({
-                error: {
-                    message: 'User not found.',
-                    code: 'USER_NOT_FOUND'
-                }
-            });
-            return;
-        }
-
-        if (user.is_verified) {
-            res.status(400).json({
-                error: {
-                    message: 'Account is already verified. Please log in.',
-                    code: 'ALREADY_VERIFIED'
-                }
-            });
-            return;
-        }
-
-        // Compare OTP code
-        if (!user.verification_code || user.verification_code !== trimmedCode) {
-            res.status(400).json({
-                error: {
-                    message: 'Invalid verification code. Please check and try again.',
-                    code: 'INVALID_CODE'
-                }
-            });
-            return;
-        }
-
-        // Check if OTP expired
-        if (user.verification_code_expires_at && new Date() > new Date(user.verification_code_expires_at)) {
-            res.status(400).json({
-                error: {
-                    message: 'Verification code has expired. Please request a new one.',
-                    code: 'CODE_EXPIRED'
-                }
-            });
-            return;
-        }
-
-        // Mark user verified and clear the OTP code
-        await pool.query(
+        // Atomic conditional update to prevent race conditions and token replay
+        const result = await pool.query(
             `UPDATE users 
              SET is_verified = TRUE, 
                  verification_code = NULL, 
                  verification_code_expires_at = NULL, 
                  updated_at = NOW() 
-             WHERE id = $1`,
-            [user.id]
+             WHERE LOWER(email) = LOWER($1) 
+               AND verification_code = $2 
+               AND verification_code_expires_at > NOW() 
+             RETURNING id, full_name, email, matric_number, phone, is_verified, avatar_url, created_at, updated_at;`,
+            [trimmedEmail, trimmedCode]
         );
-        user.is_verified = true;
 
+        if (result.rowCount === 0) {
+            const existing = await findUserByEmail(trimmedEmail);
+            if (!existing) {
+                res.status(404).json({
+                    error: {
+                        message: 'User not found.',
+                        code: 'USER_NOT_FOUND'
+                    }
+                });
+                return;
+            }
+            if (existing.is_verified) {
+                res.status(400).json({
+                    error: {
+                        message: 'Account is already verified. Please log in.',
+                        code: 'ALREADY_VERIFIED'
+                    }
+                });
+                return;
+            }
+            res.status(400).json({
+                error: {
+                    message: 'Invalid or expired verification code. Please request a new one.',
+                    code: 'INVALID_OR_EXPIRED_CODE'
+                }
+            });
+            return;
+        }
+
+        const user = result.rows[0];
         const jwtSecret = process.env.JWT_SECRET;
         if (!jwtSecret) {
             throw new Error('FATAL: JWT_SECRET is not set');
@@ -423,6 +425,24 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
                 }
             });
             return;
+        }
+
+        const trimmedEmail = email.toLowerCase().trim();
+        const user = await findUserByEmail(trimmedEmail);
+
+        if (user) {
+            const resetOtp = generateOtp();
+            const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+            await pool.query(
+                `UPDATE users 
+                 SET verification_code = $1, 
+                     verification_code_expires_at = $2, 
+                     updated_at = NOW() 
+                 WHERE id = $3`,
+                [resetOtp, expiresAt, user.id]
+            );
+            await sendVerificationOtpEmail(trimmedEmail, resetOtp);
         }
 
         // Return 204 confirmation

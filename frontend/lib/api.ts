@@ -67,6 +67,7 @@ export type User = {
   fullName: string;
   matricNumber: string;
   schoolEmail: string;
+  avatarUrl: string | null;
   avgRating: number | null;
   trustTier: TrustTier;
 };
@@ -223,7 +224,15 @@ function parseUser(value: unknown): User {
   if (!id || !fullName || !matricNumber || !schoolEmail || !trustTier) {
     throw new ApiError("Unexpected response from Runna. Try again.", { status: 502 });
   }
-  return { id, fullName, matricNumber, schoolEmail, trustTier, avgRating: typeof value.avgRating === "number" ? value.avgRating : null };
+  return {
+    id,
+    fullName,
+    matricNumber,
+    schoolEmail,
+    trustTier,
+    avatarUrl: readString(value, "avatarUrl"),
+    avgRating: typeof value.avgRating === "number" ? value.avgRating : null,
+  };
 }
 
 function parseAuthResult(value: unknown): AuthResult {
