@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes.js';
 import taskRoutes from './routes/task.routes.js';
@@ -10,6 +11,7 @@ dotenv.config()
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(helmet());
 app.use(cors({
     origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
     credentials: true
@@ -27,6 +29,5 @@ app.use('/tasks', taskRoutes);
 
 
 app.listen(PORT, () => {
-    console.log('Server running');
-
-})
+    console.log(`Server is runnin on port ${PORT}`);
+});
