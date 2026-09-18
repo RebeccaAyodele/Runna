@@ -68,7 +68,7 @@ export function BenefitsTabs() {
   }
 
   return <>
-    <div role="tablist" aria-label="Runna benefits" className="mt-6 flex rounded-full border border-runna-outline bg-white p-1.5 shadow-runna-card">
+    <div role="tablist" aria-label="Runna benefits" className="mx-auto mt-6 flex max-w-md rounded-full border border-runna-outline bg-white p-1.5 shadow-runna-card">
       {views.map((view, index) => {
         const active = index === activeIndex;
         return <button
@@ -87,30 +87,35 @@ export function BenefitsTabs() {
       })}
     </div>
 
+    {/* The panels hold two or three cards depending on the tab, so the grid is
+        auto-flowing rather than a fixed column count — a 3-card tab fills the
+        row on desktop and a 2-card tab doesn't leave a gap. */}
     {views.map((view, index) => <div
       key={view.key}
       role="tabpanel"
       id={`benefits-panel-${view.key}`}
       aria-labelledby={`benefits-tab-${view.key}`}
       hidden={index !== activeIndex}
-      className="mt-6 grid gap-4"
+      className="mt-6 grid gap-4 md:mt-10 md:grid-cols-2 md:gap-6 lg:grid-cols-3"
     >
       {view.benefits.map((benefit) => <BenefitCard key={benefit.title} {...benefit} />)}
-      <div className="relative mt-2 h-32 overflow-hidden rounded-2xl shadow-runna-card">
-        <Image src="/runna-campus.png" alt="" fill sizes="(min-width: 768px) 448px, 100vw" className="object-cover" />
+      <div className="relative mt-2 h-32 overflow-hidden rounded-2xl shadow-runna-card md:mt-0 md:h-auto md:min-h-48">
+        <Image src="/runna-campus.png" alt="" fill sizes="(min-width: 1024px) 336px, (min-width: 768px) 352px, 100vw" className="object-cover" />
         <div className="absolute inset-0 flex items-end bg-gradient-to-t from-runna-blue/80 to-transparent p-4">
           <span className="text-sm font-semibold tracking-[0.02em] text-white">{view.caption}</span>
         </div>
       </div>
     </div>)}
 
-    <div className="relative mt-8 overflow-hidden rounded-2xl border border-runna-outline bg-runna-blue-soft p-7 text-center">
+    <div className="relative mt-8 overflow-hidden rounded-2xl border border-runna-outline bg-runna-blue-soft p-7 text-center md:mt-12 md:flex md:items-center md:justify-between md:gap-8 md:p-10 md:text-left">
       <span aria-hidden="true" className="absolute inset-y-0 left-4 border-l-2 border-dashed border-runna-blue opacity-20" />
-      <h3 className="font-heading text-2xl font-bold">Ready to Run?</h3>
-      <p className="mt-1 leading-6 text-runna-muted">Join the campus hustle today. Thousands of students are already moving.</p>
+      <div className="md:flex-1">
+        <h3 className="font-heading text-2xl font-bold md:text-3xl">Ready to Run?</h3>
+        <p className="mt-1 leading-6 text-runna-muted">Join the campus hustle today. Thousands of students are already moving.</p>
+      </div>
       <Link
         href="/sign-up"
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-runna-coral px-6 py-4 font-heading text-xl font-semibold text-white shadow-runna-button transition-transform hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-runna-coral active:scale-[0.98]"
+        className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-runna-coral px-6 py-4 font-heading text-xl font-semibold text-white shadow-runna-button transition-transform hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-runna-coral active:scale-[0.98] md:mt-0 md:w-auto md:shrink-0"
       >Get the App<ArrowRightIcon className="size-6" /></Link>
     </div>
   </>;
